@@ -1,0 +1,50 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  attributes:
+    teamcity:
+      agent:
+        name: test-kitchen-agent
+        server_uri: 'http://teamcity.apicasystem.com'
+    java:
+      install_flavor: oracle
+      jdk_version: 8
+      set_etc_environment: true
+      oracle:
+        accept_oracle_download_terms: true
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: centos-7.3
+
+  - name: debian-7.11
+    run_list:
+      - recipe[apt]
+
+  - name: debian-8.6
+    run_list:
+      - recipe[apt]
+
+  - name: ubuntu-14.04
+    run_list:
+      - recipe[apt]
+
+  - name: ubuntu-16.04
+    run_list:
+      - recipe[apt]
+
+  - name: windows-2012r2
+    driver:
+      box: apica/windows-2012r2 # The box is private
+    transport:
+      name: winrm
+
+suites:
+  - name: agent
+    run_list:
+      - recipe[teamcity]

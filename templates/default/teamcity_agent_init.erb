@@ -1,0 +1,65 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          <%= @teamcity_service_name %>
+# Required-Start:    $network
+# Required-Stop:     $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+### END INIT INFO
+
+# Source function library.
+<% case node['platform_family'] -%>
+<% when 'rhel' -%>
+. /etc/rc.d/init.d/functions
+<% else -%>
+. /lib/lsb/init-functions
+<% end -%>
+
+TEAMCITY_SERVICE_NAME=<%= @teamcity_service_name %>
+TEAMCITY_USER=<%= @teamcity_user_name %>
+TEAMCITY_AGENT=<%= @teamcity_executable %>
+TEAMCITY_PIDFILE="<%= @teamcity_pidfile %>"
+
+RETVAL=0
+
+start() {
+  sudo -u $TEAMCITY_USER -s -- sh -c "$TEAMCITY_AGENT start"
+  return $?
+}
+
+stop() {
+  sudo -u $TEAMCITY_USER -s -- sh -c "$TEAMCITY_AGENT stop kill"
+  return $?
+}
+
+case "$1" in
+  start)
+    start
+    RETVAL=$?
+    ;;
+  status)
+    <% case node['platform_family'] -%>
+    <% when 'rhel' -%>
+    status -p $TEAMCITY_PIDFILE $TEAMCITY_SERVICE_NAME
+    <% else -%>
+    status_of_proc -p $TEAMCITY_PIDFILE java $TEAMCITY_SERVICE_NAME
+    <% end -%>
+
+    RETVAL=$?
+    ;;
+  stop)
+    stop
+    RETVAL=$?
+    ;;
+  restart)
+    stop
+    start
+    RETVAL=$?
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|status}"
+    RETVAL=2
+    ;;
+esac
+
+exit $RETVAL
