@@ -8,7 +8,7 @@ provisioner:
     teamcity:
       agent:
         name: test-kitchen-agent
-        server_uri: 'http://teamcity.apicasystem.com'
+        server_uri: <%= ENV['TEAMCITY_SERVER_URI'] || nil %>
     java:
       install_flavor: oracle
       jdk_version: 8
