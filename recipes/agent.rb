@@ -16,7 +16,7 @@
 #
 
 if node['teamcity']['agent']['server_uri'].to_s == ''
-  fatal "Attribute node['teamcity']['agent']['server_uri'] is not specified!" \
+  raise "Attribute node['teamcity']['agent']['server_uri'] is not specified!" \
         'You need to set it to proceed the Teamcity agent installation'
 end
 
