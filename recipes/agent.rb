@@ -95,6 +95,16 @@ else
       teamcity_executable:   File.join(TEAMCITY_PATH, 'bin/', 'agent.sh'),
       teamcity_pidfile:      File.join(TEAMCITY_PATH, 'logs/', 'buildAgent.pid')
     )
+
+    # Trigger the gereration of teamcity.service unit on systemd-driven systems
+    if node['init_package'] == 'systemd'
+      notifies :run, 'execute[systemd_reload]', :immediately
+    end
+  end
+
+  execute 'systemd_reload' do
+    command 'systemctl daemon-reload'
+    action :nothing
   end
 end
 
