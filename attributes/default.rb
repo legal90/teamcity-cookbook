@@ -38,6 +38,3 @@ default['teamcity']['agent']['env_properties'] = {}
 default['teamcity']['agent']['work_dir'] = '../work'
 default['teamcity']['agent']['temp_dir'] = '../temp'
 default['teamcity']['agent']['system_dir'] = '../system'
-
-# Start the service at during the Chef run
-default['teamcity']['agent']['start_service'] = true

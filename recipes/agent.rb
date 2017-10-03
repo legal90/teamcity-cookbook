@@ -110,6 +110,5 @@ end
 
 service node['teamcity']['service_name'] do
   supports start: true, stop: true, restart: true, status: true
-  action :enable
-  action :start if node['teamcity']['agent']['start_service']
+  action [:enable, :start]
 end
